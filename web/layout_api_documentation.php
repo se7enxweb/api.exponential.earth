@@ -7,6 +7,7 @@ $oldVersions = array( "4.3.0", "4.2.0", "4.1.4", "4.0.7", "3.10.1", "3.9.5", "3.
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Exponential : API Documentation : Portal</title>
     <link rel="stylesheet" type="text/css" href="design/stylesheets/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="design/stylesheets/bootstrap-responsive.min.css" />

@@ -40,3 +40,70 @@ section { border-bottom: 1px solid #ddd; margin-bottom: 3em; padding-bottom: 1em
 
 .tile h4 { margin-top: 0; }
 
+/* ── Mobile / Responsive ────────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+
+    /* Hide GitHub ribbon — overlaps header on small screens */
+    img[alt="Fork me on GitHub"] { display: none; }
+
+    /* Logo */
+    .main-header { text-align: center; padding: 10px 0; }
+    .main-logo { max-width: 90vw; width: 220px !important; height: auto; }
+
+    /* Navbar affix: full-width, no fixed pixel width */
+    .main-nav.affix { width: 100%; }
+
+    /* Container: tight side padding */
+    .container.main { padding-left: 10px; padding-right: 10px; }
+
+    /* Tables: allow horizontal scroll so they don't blow out the viewport */
+    section table.table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+    }
+
+    /* Release columns: drop fixed percentage widths */
+    th.stack, th.doxygen, th.docblox, th.sami { width: auto; white-space: nowrap; }
+
+    /* Tiles: stack full-width, auto height */
+    .tile {
+        width: 100%;
+        float: none;
+        height: auto;
+        min-height: 0;
+        margin: 0 0 12px 0;
+        box-sizing: border-box;
+    }
+
+    /* Download links: more breathing room between options */
+    .download-link { padding: 3px 0; }
+
+    /* Sections */
+    section { margin-bottom: 1.5em; }
+
+    /* Version tabs: allow wrapping */
+    .nav-tabs > li > a { padding: 6px 8px; font-size: 0.9em; }
+
+    /* Copyright footer */
+    body > div[style*="text-align:center"] { font-size: 0.9em; padding: 0.6em 10px; }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+
+    /* Narrow tablets: two-column tiles */
+    .tile { width: 46%; }
+
+    /* Affix: full width (avoids the 1170px overflow) */
+    .main-nav.affix { width: 100%; }
+
+    /* Tables scrollable on portrait tablets too */
+    section table.table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
