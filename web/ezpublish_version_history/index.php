@@ -32,11 +32,28 @@ $height = count( $branches ) * 19 + 17 /* self height */ + 13; /* 1 line title s
 
 ?>
 <html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>eZ Publish Version History</title>
+</head>
 <style type="text/css">
-body { font-family: arial; color: #646464;}
+body { font-family: arial; color: #646464; margin: 8px; }
 h1 { color: #2A84B7; }
 th { color: #F36F21; }
+
+.graph-scroll-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    border: 1px solid #ddd;
+    padding-bottom: 6px;
+}
+
+@media (max-width: 767px) {
+    h1 { font-size: 1.3em; margin: 0.5em 0; }
+    p { font-size: 0.9em; }
+}
 #branchgraph { border: none; }
 #branchgraph td { border: none; margin: 0; padding: 0; font-size: small; height: 17px; }
 
@@ -69,6 +86,8 @@ width: 100px;
 </style>
 <body>
 <h1>eZ Publish Version History</h1>
+<p style="color:#888;font-size:0.85em;">Scroll horizontally to view the full timeline.</p>
+<div class="graph-scroll-wrap">
 <table id="branchgraph">
 <tr><th>Branch</th><th>Releases</th></tr>
 <?php
@@ -156,19 +175,7 @@ foreach ( $branches as $branchname => $branchdata )
 
 ?>
 </table>
-
-<!-- Piwik -->
-<script type="text/javascript">
-var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.share.ez.no/" : "http://piwik.share.ez.no/");
-document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
-</script><script type="text/javascript">
-try {
-var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
-piwikTracker.trackPageView();
-piwikTracker.enableLinkTracking();
-} catch( err ) {}
-</script><noscript><p><img src="http://piwik.share.ez.no/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
-<!-- End Piwik Tracking Tag -->
+</div><!-- .graph-scroll-wrap -->
 
 </body>
 </html>
