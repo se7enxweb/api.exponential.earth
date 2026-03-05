@@ -1,0 +1,32 @@
+# ── Archive / legacy copies (not tracked) ─────────────────────────────────────
+arc/
+
+# ── Source repository clones (fetched at install time) ────────────────────────
+src/exponential/
+src/ezpublish-kernel/
+src/exponentialbasic/
+
+# ── Generated Doxygen HTML output ─────────────────────────────────────────────
+doxygen/
+
+# ── Generated download archives ───────────────────────────────────────────────
+trunk/
+
+# ── Doxygen build and warning logs ────────────────────────────────────────────
+build/log/doxygen-*.log
+
+# ── Doxygen tag files ─────────────────────────────────────────────────────────
+build/*.tag
+build/**/*.tag
+
+# ── OS / editor noise ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# ── PHP backup files ──────────────────────────────────────────────────────────
+*.php~

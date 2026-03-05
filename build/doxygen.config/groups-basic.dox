@@ -1,0 +1,1746 @@
+/**
+ * \defgroup Libraries Libraries
+ * \brief Core support libraries shared across all Exponential Basic modules.
+ *
+ * \details
+ * These libraries provide foundational services that kernel modules build upon.
+ * They are framework-independent and can be used in isolation.
+ *
+ * | Library | Purpose |
+ * |---------|---------| 
+ * | \ref lib_ezfile  | File I/O, directory traversal, MIME detection |
+ * | \ref lib_ezi18n  | Translation, locale, character-set conversion |
+ * | \ref lib_ezsession | Session storage abstraction |
+ * | \ref lib_ezutils | General helpers, debug, ini parsing, math |
+ */
+
+/**
+ * \defgroup lib_ezfile File Library (ezfile)
+ * \ingroup Libraries
+ * \brief File and filesystem utility functions.
+ *
+ * \details
+ * Provides a portable, object-oriented interface for working with the filesystem.
+ * Covers file creation, reading, writing, copying, MIME-type detection, directory
+ * traversal, compression handlers (gzip, bzip2) and cluster-aware file storage.
+ *
+ * \par Key Classes
+ * - \ref eZBZIP2Handler
+ * - \ref eZCompressionHandler
+ * - \ref eZDir
+ * - \ref eZFile
+ * - \ref eZFileHandler
+ * - \ref eZForwardCompressionHandler
+ * - \ref eZGZIPCompressionHandler
+ * - \ref eZGZIPShellCompressionHandler
+ * - \ref eZGZIPZLIBCompressionHandler
+ * - \ref eZLog
+ * - \ref eZMD5
+ * - \ref eZNoCompressionHandler
+ *
+ * \see lib_ezutils
+ */
+
+/**
+ * \defgroup lib_ezi18n Internationalisation Library (ezi18n)
+ * \ingroup Libraries
+ * \brief Translation, locale and character-set support.
+ *
+ * \details
+ * Manages all language and locale concerns for Exponential Basic:
+ * - Translation catalogue loading and string lookup
+ * - Locale formatting for dates, numbers and currencies
+ * - Character-set conversion via iconv/mbstring
+ * - Right-to-left language support
+ *
+ * \par Key Classes
+ * - \ref eZ1337Translator
+ * - \ref eZBorkTranslator
+ * - \ref eZCharTransform
+ * - \ref eZCharsetInfo
+ * - \ref eZCodeMapper
+ * - \ref eZCodePage
+ * - \ref eZCodePageCodec
+ * - \ref eZCodePageMapper
+ * - \ref eZMBStringMapper
+ * - \ref eZRandomTranslator
+ * - \ref eZShuffleTranslator
+ * - \ref eZTSTranslator
+ * - \ref eZTextCodec
+ * - \ref eZTranslationCache
+ * - \ref eZTranslatorGroup
+ * - \ref eZTranslatorHandler
+ * - \ref eZTranslatorManager
+ * - \ref eZUTF8Codec
+ *
+ * \see lib_ezutils
+ */
+
+/**
+ * \defgroup lib_ezsession Session Library (ezsession)
+ * \ingroup Libraries
+ * \brief Session management and storage abstraction.
+ *
+ * \details
+ * A thin abstraction over PHP's native session handling that supports pluggable
+ * storage backends (database, file, cluster).  Integrates with the kernel user
+ * system to bind session data to authenticated users.
+ *
+ * \par Key Classes
+ * - \ref eZSession
+ *
+ * \see ezuser
+ * \see KernelClasses
+ */
+
+/**
+ * \defgroup lib_ezutils Utilities Library (ezutils)
+ * \ingroup Libraries
+ * \brief General-purpose helper classes and convenience utilities.
+ *
+ * \details
+ * A broad collection of utilities used throughout the CMS:
+ * - Debug output and logging
+ * - INI file parsing and settings management
+ * - URI parsing and routing
+ * - Image conversion and scaling
+ * - Mail composition and sending
+ * - Cryptography helpers
+ *
+ * \par Key Classes
+ * - \ref eZDebug
+ * - \ref eZDebugSetting
+ * - \ref eZExecution
+ * - \ref eZExpiryHandler
+ * - \ref eZExtension
+ * - \ref eZINI
+ * - \ref eZPHPCreator
+ * - \ref eZSys
+ * - \ref eZTextCodec
+ * - \ref eZURI
+ *
+ * \see lib_ezfile
+ * \see lib_ezi18n
+ */
+
+/* ─── Kernel ──────────────────────────────────────────────────────────────── */
+
+/**
+ * \defgroup KernelModules Kernel Modules
+ * \brief The Exponential Basic 2.x kernel modules.
+ *
+ * \details
+ * Each module is a self-contained functional unit of the CMS.  A module
+ * typically contains:
+ * - **classes/** — business-logic and data-access classes
+ * - **admin/** — administrative view scripts
+ * - **user/** — public-facing view scripts
+ * - **sql/** — schema and seed data
+ *
+ * Modules communicate through the kernel dispatch layer (\ref ezmodule) and
+ * share infrastructure from the core libraries (\ref Libraries).
+ *
+ * | Module | Summary |
+ * |--------|---------|
+ * | \ref ezabout | About / identity pages |
+ * | \ref ezad | Advertisement management |
+ * | \ref ezaddress | Address book / directory |
+ * | \ref ezarticle | Article publishing |
+ * | \ref ezbug | Bug / issue tracker |
+ * | \ref ezbulkmail | Newsletters and bulk mail |
+ * | \ref ezcalendar | Event calendar |
+ * | \ref ezcontact | Contact forms |
+ * | \ref ezerror | Custom error pages |
+ * | \ref ezexample | Tutorial / example module |
+ * | \ref ezfilemanager | File upload and downloads |
+ * | \ref ezform | Form builder |
+ * | \ref ezforum | Discussion forums |
+ * | \ref ezgroupeventcalendar | Group-scoped event scheduling |
+ * | \ref ezimagecatalogue | Image gallery / catalogue |
+ * | \ref ezlink | Link directory |
+ * | \ref ezmail | Internal site mail |
+ * | \ref ezmediacatalogue | Media asset management |
+ * | \ref ezmessage | System notifications |
+ * | \ref ezmodule | Module registry and dispatch |
+ * | \ref eznewsfeed | RSS / Atom news feeds |
+ * | \ref ezpoll | Online polls |
+ * | \ref ezquiz | Quiz engine |
+ * | \ref ezsearch | Full-text search |
+ * | \ref ezsession | Kernel session integration |
+ * | \ref ezsitemanager | Multi-site management |
+ * | \ref ezstats | Visitor statistics |
+ * | \ref ezsurvey | Surveys |
+ * | \ref ezsysinfo | System diagnostics |
+ * | \ref eztip | Tip-of-the-day |
+ * | \ref eztodo | To-do lists |
+ * | \ref eztrade | E-commerce / trade |
+ * | \ref ezurltranslator | URL aliasing |
+ * | \ref ezuser | Users and authentication |
+ * | \ref ezxml | XML / structured content |
+ * | \ref ezxmlrpc | XML-RPC API |
+ */
+
+/**
+ * \defgroup KernelClasses Core Kernel Classes
+ * \ingroup KernelModules
+ * \brief Shared kernel data structures, base classes and framework utilities.
+ *
+ * \details
+ * Everything in `kernel/classes/` that is not specific to one feature module.
+ * Includes the content framework, persistent-object layer, workflow engine,
+ * caching subsystem and template-variable providers that all other modules rely on.
+ *
+ * \par Key Classes
+ * - \ref eZBenchmark
+ * - \ref eZCCTool
+ * - \ref eZCacheFile
+ * - \ref eZCheckoutSupplierGateway
+ * - \ref eZClusterFileFailure
+ * - \ref eZClusterFileHandler
+ * - \ref eZContentLanguage
+ * - \ref eZCurrency
+ * - \ref eZDB
+ * - \ref eZDate
+ * - \ref eZDateTime
+ * - \ref eZFSFileHandler
+ * - \ref eZGPG
+ * - \ref eZHTTPHeader
+ * - \ref eZHTTPTool
+ * - \ref eZInformixDB
+ * - \ref eZLinkItem
+ * - \ref eZLinkSection
+ * - \ref eZList
+ * - \ref eZLocale
+ * - \ref eZMediaFile
+ * - \ref eZMenuBox
+ * - \ref eZModuleLink
+ * - \ref eZMySQLBackendError
+ * - \ref eZMySQLDB
+ * - \ref eZPBFile
+ * - \ref eZPBINIFile
+ * - \ref eZPBImageFile
+ * - \ref eZPBLog
+ * - \ref eZPersistentObject
+ * - \ref eZPostgreSQLDB
+ * - \ref eZPublish
+ * - \ref eZQuery
+ * - \ref eZSQLite3DB
+ * - \ref eZSiteAccess
+ * - \ref eZTemplate
+ * - \ref eZTextTool
+ * - \ref eZTime
+ * - \ref eZURITool
+ *
+ * \see Libraries
+ * \see ezmodule
+ */
+
+/**
+ * \defgroup ezabout About
+ * \ingroup KernelModules
+ * \brief Site identity and "about this site" pages.
+ *
+ * \details
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \see ezsitemanager
+ * \see ezsysinfo
+ */
+
+/**
+ * \defgroup ezad Advertisements
+ * \ingroup KernelModules
+ * \brief Banner and advertisement management.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZAd
+ * - \ref eZAdCategory
+ * - \ref eZAdClick
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref adedit.php "adedit.php"
+ * - \ref adlist.php "adlist.php"
+ * - \ref adstatistics.php "adstatistics.php"
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ *
+ * \par Public View Scripts
+ * - \ref adlist.php "adlist.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref gotoad.php "gotoad.php"
+ * - \ref queuedadlist.php "queuedadlist.php"
+ *
+ * \see ezstats
+ * \see ezlink
+ */
+
+/**
+ * \defgroup ezaddress Address Book
+ * \ingroup KernelModules
+ * \brief Contact address management and directory services.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZAddress
+ * - \ref eZAddressType
+ * - \ref eZCountry
+ * - \ref eZOnline
+ * - \ref eZOnlineType
+ * - \ref eZPhone
+ * - \ref eZPhoneType
+ * - \ref eZRegion
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref addresstypeedit.php "addresstypeedit.php"
+ * - \ref addresstypelist.php "addresstypelist.php"
+ * - \ref countryedit.php "countryedit.php"
+ * - \ref countrylist.php "countrylist.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref onlinetypeedit.php "onlinetypeedit.php"
+ * - \ref onlinetypelist.php "onlinetypelist.php"
+ * - \ref phonetypeedit.php "phonetypeedit.php"
+ * - \ref phonetypelist.php "phonetypelist.php"
+ * - \ref regionedit.php "regionedit.php"
+ * - \ref regionlist.php "regionlist.php"
+ * - \ref typeedit.php "typeedit.php"
+ * - \ref typelist.php "typelist.php"
+ * - \ref typelist_pre.php "typelist_pre.php"
+ *
+ * \see ezcontact
+ * \see ezuser
+ */
+
+/**
+ * \defgroup ezarticle Articles
+ * \ingroup KernelModules
+ * \brief Article authoring, publishing, versioning and listing.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZArticle
+ * - \ref eZArticleAttribute
+ * - \ref eZArticleCategory
+ * - \ref eZArticleForm
+ * - \ref eZArticleGenerator
+ * - \ref eZArticleRenderer
+ * - \ref eZArticleSupplier
+ * - \ref eZArticleTool
+ * - \ref eZArticleType
+ * - \ref eZEzGenerator
+ * - \ref eZEzRenderer
+ * - \ref eZImageMap
+ * - \ref eZQDomGenerator
+ * - \ref eZQDomRenderer
+ * - \ref eZSimpleGenerator
+ * - \ref eZSimpleRenderer
+ * - \ref eZTechGenerator
+ * - \ref eZTechRenderer
+ * - \ref eZTopic
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref ezarticlesupplier.php "ezarticlesupplier.php"
+ * - \ref searchsupplier.php "searchsupplier.php"
+ * - \ref urlsupplier.php "urlsupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref articleedit.php "articleedit.php"
+ * - \ref articlelist.php "articlelist.php"
+ * - \ref articlelog.php "articlelog.php"
+ * - \ref articlepreview.php "articlepreview.php"
+ * - \ref attributeedit.php "attributeedit.php"
+ * - \ref attributelist.php "attributelist.php"
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref categorylist.php "categorylist.php"
+ * - \ref cron.php "cron.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref export.php "export.php"
+ * - \ref fileedit.php "fileedit.php"
+ * - \ref filelist.php "filelist.php"
+ * - \ref formlist.php "formlist.php"
+ * - \ref imageedit.php "imageedit.php"
+ * - \ref imagelist.php "imagelist.php"
+ * - \ref imagemap.php "imagemap.php"
+ * - \ref mediaedit.php "mediaedit.php"
+ * - \ref medialist.php "medialist.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref pendinglist.php "pendinglist.php"
+ * - \ref search.php "search.php"
+ * - \ref searchform.php "searchform.php"
+ * - \ref sitemap.php "sitemap.php"
+ * - \ref topiclist.php "topiclist.php"
+ * - \ref typeedit.php "typeedit.php"
+ * - \ref typelist.php "typelist.php"
+ * - \ref unpublishedlist.php "unpublishedlist.php"
+ *
+ * \par Public View Scripts
+ * - \ref articleedit.php "articleedit.php"
+ * - \ref articleheaderlist.php "articleheaderlist.php"
+ * - \ref articlelinks.php "articlelinks.php"
+ * - \ref articlelist.php "articlelist.php"
+ * - \ref articlelistrss.php "articlelistrss.php"
+ * - \ref articleview.php "articleview.php"
+ * - \ref authorlist.php "authorlist.php"
+ * - \ref authorview.php "authorview.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref extendedsearch.php "extendedsearch.php"
+ * - \ref fileedit.php "fileedit.php"
+ * - \ref filelist.php "filelist.php"
+ * - \ref frontpage.php "frontpage.php"
+ * - \ref headlines.php "headlines.php"
+ * - \ref homepage.php "homepage.php"
+ * - \ref imageedit.php "imageedit.php"
+ * - \ref imagelist.php "imagelist.php"
+ * - \ref index.php "index.php"
+ * - \ref mailtofriend.php "mailtofriend.php"
+ * - \ref menuarticleview.php "menuarticleview.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref menumaker.php "menumaker.php"
+ * - \ref newsgroup.php "newsgroup.php"
+ * - \ref search.php "search.php"
+ * - \ref searchform.php "searchform.php"
+ * - \ref searchsupplier.php "searchsupplier.php"
+ * - \ref sitemap.php "sitemap.php"
+ * - \ref smallarticlelist.php "smallarticlelist.php"
+ * - \ref topiclist.php "topiclist.php"
+ * - \ref urlsupplier.php "urlsupplier.php"
+ *
+ * \see eznewsfeed
+ * \see ezforum
+ * \see ezimagecatalogue
+ * \see ezmediacatalogue
+ * \see ezxmlrpc
+ */
+
+/**
+ * \defgroup ezbug Bug Tracker
+ * \ingroup KernelModules
+ * \brief Issue and bug tracking within the CMS.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZBug
+ * - \ref eZBugCategory
+ * - \ref eZBugLog
+ * - \ref eZBugModule
+ * - \ref eZBugPriority
+ * - \ref eZBugStatus
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref bugedit.php "bugedit.php"
+ * - \ref buglist.php "buglist.php"
+ * - \ref bugpreview.php "bugpreview.php"
+ * - \ref categorylist.php "categorylist.php"
+ * - \ref cron.php "cron.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref moduleedit.php "moduleedit.php"
+ * - \ref modulelist.php "modulelist.php"
+ * - \ref prioritylist.php "prioritylist.php"
+ * - \ref search.php "search.php"
+ * - \ref statuslist.php "statuslist.php"
+ * - \ref unhandledbugs.php "unhandledbugs.php"
+ *
+ * \par Public View Scripts
+ * - \ref buglist.php "buglist.php"
+ * - \ref bugreport.php "bugreport.php"
+ * - \ref bugview.php "bugview.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref fileedit.php "fileedit.php"
+ * - \ref imageedit.php "imageedit.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref menumodulelist.php "menumodulelist.php"
+ * - \ref reportsuccess.php "reportsuccess.php"
+ * - \ref search.php "search.php"
+ * - \ref unhandledbugs.php "unhandledbugs.php"
+ *
+ * \see ezbulkmail
+ * \see ezuser
+ * \see ezsurvey
+ */
+
+/**
+ * \defgroup ezbulkmail Bulk Mail
+ * \ingroup KernelModules
+ * \brief Mass email / newsletter composition and sending.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZBulkMail
+ * - \ref eZBulkMailCategory
+ * - \ref eZBulkMailCategorySettings
+ * - \ref eZBulkMailForgot
+ * - \ref eZBulkMailSubscriptionAddress
+ * - \ref eZBulkMailSubscriptionUser
+ * - \ref eZBulkMailTemplate
+ * - \ref eZBulkMailUserCategorySettings
+ * - \ref eZBulkMailUserSubscripter
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref categorylist.php "categorylist.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref mailedit.php "mailedit.php"
+ * - \ref maillist.php "maillist.php"
+ * - \ref mailview.php "mailview.php"
+ * - \ref masssubscribe.php "masssubscribe.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref templateedit.php "templateedit.php"
+ * - \ref templatelist.php "templatelist.php"
+ * - \ref userlist.php "userlist.php"
+ *
+ * \par Public View Scripts
+ * - \ref bulklist.php "bulklist.php"
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref cron.php "cron.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref mailview.php "mailview.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref singlelist.php "singlelist.php"
+ * - \ref subscriptionlist.php "subscriptionlist.php"
+ * - \ref subscriptionlogin.php "subscriptionlogin.php"
+ * - \ref usermessages.php "usermessages.php"
+ *
+ * \see ezmail
+ * \see ezstats
+ * \see ezuser
+ */
+
+/**
+ * \defgroup ezcalendar Calendar
+ * \ingroup KernelModules
+ * \brief Event calendar management and display.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZAppointment
+ * - \ref eZAppointmentType
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref typeedit.php "typeedit.php"
+ * - \ref typelist.php "typelist.php"
+ *
+ * \par Public View Scripts
+ * - \ref appointmentedit.php "appointmentedit.php"
+ * - \ref appointmentview.php "appointmentview.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref dayview.php "dayview.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref monthview.php "monthview.php"
+ * - \ref trustees.php "trustees.php"
+ * - \ref yearview.php "yearview.php"
+ *
+ * \see ezgroupeventcalendar
+ * \see ezuser
+ */
+
+/**
+ * \defgroup ezcontact Contact Forms
+ * \ingroup KernelModules
+ * \brief Public contact forms and enquiry handling.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZCompany
+ * - \ref eZCompanyType
+ * - \ref eZConsultation
+ * - \ref eZConsultationType
+ * - \ref eZContactSupplier
+ * - \ref eZPerson
+ * - \ref eZProjectType
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref ezcontactsupplier.php "ezcontactsupplier.php"
+ * - \ref searchsupplier.php "searchsupplier.php"
+ * - \ref urlsupplier.php "urlsupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref buy.php "buy.php"
+ * - \ref companyedit.php "companyedit.php"
+ * - \ref companystats.php "companystats.php"
+ * - \ref companytypeedit.php "companytypeedit.php"
+ * - \ref companytypelist.php "companytypelist.php"
+ * - \ref companyview.php "companyview.php"
+ * - \ref consultationedit.php "consultationedit.php"
+ * - \ref consultationlist.php "consultationlist.php"
+ * - \ref consultationtypeedit.php "consultationtypeedit.php"
+ * - \ref consultationtypelist.php "consultationtypelist.php"
+ * - \ref consultationview.php "consultationview.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref error.php "error.php"
+ * - \ref folder.php "folder.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref nopermission.php "nopermission.php"
+ * - \ref personedit.php "personedit.php"
+ * - \ref personlist.php "personlist.php"
+ * - \ref persontypeedit.php "persontypeedit.php"
+ * - \ref persontypelist.php "persontypelist.php"
+ * - \ref personview.php "personview.php"
+ * - \ref projecttypeedit.php "projecttypeedit.php"
+ * - \ref projecttypelist.php "projecttypelist.php"
+ * - \ref sendmail.php "sendmail.php"
+ * - \ref setup.php "setup.php"
+ * - \ref typeedit.php "typeedit.php"
+ * - \ref typelist.php "typelist.php"
+ * - \ref typelist_pre.php "typelist_pre.php"
+ *
+ * \par Public View Scripts
+ * - \ref companysearch.php "companysearch.php"
+ * - \ref consultationlist.php "consultationlist.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref personsearch.php "personsearch.php"
+ * - \ref searchsupplier.php "searchsupplier.php"
+ * - \ref urlsupplier.php "urlsupplier.php"
+ *
+ * \see ezform
+ * \see ezmail
+ * \see ezaddress
+ */
+
+/**
+ * \defgroup ezerror Error Pages
+ * \ingroup KernelModules
+ * \brief Custom error page rendering (404, 403, 500, etc.).
+ *
+ * \details
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref 403.php "403.php"
+ * - \ref 404.php "404.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref error.php "error.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \see ezsitemanager
+ * \see KernelClasses
+ */
+
+/**
+ * \defgroup ezexample Example Module
+ * \ingroup KernelModules
+ * \brief Reference / tutorial module demonstrating the extension API.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZExample
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref page.php "page.php"
+ * - \ref page2.php "page2.php"
+ * - \ref page3.php "page3.php"
+ * - \ref page4.php "page4.php"
+ * - \ref page5.php "page5.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref listtable.php "listtable.php"
+ * - \ref page.php "page.php"
+ *
+ * \see ezmodule
+ * \see KernelClasses
+ */
+
+/**
+ * \defgroup ezfilemanager File Manager
+ * \ingroup KernelModules
+ * \brief File upload, storage and download management.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZVirtualFile
+ * - \ref eZVirtualFolder
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref browse.php "browse.php"
+ * - \ref cron.php "cron.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref unassigned.php "unassigned.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref filedownload.php "filedownload.php"
+ * - \ref filelist.php "filelist.php"
+ * - \ref fileupload.php "fileupload.php"
+ * - \ref fileview.php "fileview.php"
+ * - \ref folderedit.php "folderedit.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref menufilelist.php "menufilelist.php"
+ * - \ref menufolderlist.php "menufolderlist.php"
+ * - \ref search.php "search.php"
+ * - \ref viewfile.php "viewfile.php"
+ *
+ * \see lib_ezfile
+ * \see ezimagecatalogue
+ * \see ezmediacatalogue
+ * \see ezxmlrpc
+ */
+
+/**
+ * \defgroup ezform Forms
+ * \ingroup KernelModules
+ * \brief Configurable web-form builder and submission handling.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZForm
+ * - \ref eZFormElement
+ * - \ref eZFormElementFixedValue
+ * - \ref eZFormElementType
+ * - \ref eZFormRenderer
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref fixedvalues.php "fixedvalues.php"
+ * - \ref formedit.php "formedit.php"
+ * - \ref formlist.php "formlist.php"
+ * - \ref formpreview.php "formpreview.php"
+ * - \ref formview.php "formview.php"
+ * - \ref menubox.php "menubox.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref formview.php "formview.php"
+ *
+ * \see ezcontact
+ * \see ezsurvey
+ * \see ezmail
+ */
+
+/**
+ * \defgroup ezforum Forums
+ * \ingroup KernelModules
+ * \brief Threaded discussion boards and topic management.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZForum
+ * - \ref eZForumCategory
+ * - \ref eZForumMessage
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref searchsupplier.php "searchsupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref categorylist.php "categorylist.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref editmessage.php "editmessage.php"
+ * - \ref forumedit.php "forumedit.php"
+ * - \ref forumlist.php "forumlist.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref message.php "message.php"
+ * - \ref messageedit.php "messageedit.php"
+ * - \ref messagelist.php "messagelist.php"
+ * - \ref norights.php "norights.php"
+ * - \ref search.php "search.php"
+ * - \ref unapprovededit.php "unapprovededit.php"
+ * - \ref unapprovedlist.php "unapprovedlist.php"
+ *
+ * \par Public View Scripts
+ * - \ref categorylist.php "categorylist.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref forumlist.php "forumlist.php"
+ * - \ref latestmessages.php "latestmessages.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref menuforumlist.php "menuforumlist.php"
+ * - \ref message.php "message.php"
+ * - \ref messagebody.php "messagebody.php"
+ * - \ref messageedit.php "messageedit.php"
+ * - \ref messageform.php "messageform.php"
+ * - \ref messagelist.php "messagelist.php"
+ * - \ref messagelistflat.php "messagelistflat.php"
+ * - \ref messagepath.php "messagepath.php"
+ * - \ref messagepermissions.php "messagepermissions.php"
+ * - \ref messagereply.php "messagereply.php"
+ * - \ref messagereviewlist.php "messagereviewlist.php"
+ * - \ref messagesearch.php "messagesearch.php"
+ * - \ref messagesimplelist.php "messagesimplelist.php"
+ * - \ref search.php "search.php"
+ * - \ref searchsupplier.php "searchsupplier.php"
+ * - \ref userlogin.php "userlogin.php"
+ *
+ * \see ezarticle
+ * \see ezbulkmail
+ * \see ezuser
+ * \see ezmessage
+ */
+
+/**
+ * \defgroup ezgroupeventcalendar Group Event Calendar
+ * \ingroup KernelModules
+ * \brief Group-scoped event and scheduling support.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZGroupEditor
+ * - \ref eZGroupEvent
+ * - \ref eZGroupEventCategory
+ * - \ref eZGroupEventType
+ * - \ref eZGroupNoShow
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref datasupplier_ezfilemanager_user.php "datasupplier_ezfilemanager_user.php"
+ *
+ * \par Admin View Scripts
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref categorylist.php "categorylist.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref groupdisplay.php "groupdisplay.php"
+ * - \ref groupeditor.php "groupeditor.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref typeedit.php "typeedit.php"
+ * - \ref typelist.php "typelist.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref dayview.php "dayview.php"
+ * - \ref eventedit.php "eventedit.php"
+ * - \ref eventview.php "eventview.php"
+ * - \ref fileedit.php "fileedit.php"
+ * - \ref filelist.php "filelist.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref monthview.php "monthview.php"
+ * - \ref rssheadlines.php "rssheadlines.php"
+ * - \ref weekview.php "weekview.php"
+ * - \ref yearview.php "yearview.php"
+ *
+ * \see ezcalendar
+ * \see ezuser
+ * \see ezbulkmail
+ */
+
+/**
+ * \defgroup ezimagecatalogue Image Catalogue
+ * \ingroup KernelModules
+ * \brief Image library, galleries and asset cataloguing.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZImage
+ * - \ref eZImageCategory
+ * - \ref eZImageVariation
+ * - \ref eZImageVariationGroup
+ * - \ref eZSlideshow
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref searchsupplier.php "searchsupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref browse.php "browse.php"
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref customimage.php "customimage.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref filedownload.php "filedownload.php"
+ * - \ref imageedit.php "imageedit.php"
+ * - \ref imagelist.php "imagelist.php"
+ * - \ref imageview.php "imageview.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref unassigned.php "unassigned.php"
+ *
+ * \par Public View Scripts
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref customimage.php "customimage.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref filedownload.php "filedownload.php"
+ * - \ref imageedit.php "imageedit.php"
+ * - \ref imagelist.php "imagelist.php"
+ * - \ref imageview.php "imageview.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref menucategorylist.php "menucategorylist.php"
+ * - \ref searchsupplier.php "searchsupplier.php"
+ * - \ref slideshow.php "slideshow.php"
+ *
+ * \see lib_ezfile
+ * \see ezfilemanager
+ * \see ezmediacatalogue
+ * \see ezarticle
+ */
+
+/**
+ * \defgroup ezlink Link Directory
+ * \ingroup KernelModules
+ * \brief Managed link directory with categories and ranking.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZHit
+ * - \ref eZLink
+ * - \ref eZLinkAttribute
+ * - \ref eZLinkCategory
+ * - \ref eZLinkType
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref attributeedit.php "attributeedit.php"
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref gotolink.php "gotolink.php"
+ * - \ref linkcategorylist.php "linkcategorylist.php"
+ * - \ref linkedit.php "linkedit.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref norights.php "norights.php"
+ * - \ref search.php "search.php"
+ * - \ref typeedit.php "typeedit.php"
+ * - \ref typelist.php "typelist.php"
+ * - \ref unacceptededit.php "unacceptededit.php"
+ * - \ref unacceptedlist.php "unacceptedlist.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref gotolink.php "gotolink.php"
+ * - \ref latest.php "latest.php"
+ * - \ref linkcategorylist.php "linkcategorylist.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref onepagelinklist.php "onepagelinklist.php"
+ * - \ref search.php "search.php"
+ * - \ref success.php "success.php"
+ * - \ref suggestlink.php "suggestlink.php"
+ *
+ * \see ezstats
+ * \see eznewsfeed
+ * \see ezad
+ */
+
+/**
+ * \defgroup ezmail Mail
+ * \ingroup KernelModules
+ * \brief Internal site mail between registered users.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZMail
+ * - \ref eZMailAccount
+ * - \ref eZMailFilter
+ * - \ref eZMailFilterRule
+ * - \ref eZMailFolder
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Public View Scripts
+ * - \ref accountedit.php "accountedit.php"
+ * - \ref configure.php "configure.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref fileedit.php "fileedit.php"
+ * - \ref filteredit.php "filteredit.php"
+ * - \ref folderedit.php "folderedit.php"
+ * - \ref folderlist.php "folderlist.php"
+ * - \ref link.php "link.php"
+ * - \ref mailedit.php "mailedit.php"
+ * - \ref maillist.php "maillist.php"
+ * - \ref mailview.php "mailview.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref search.php "search.php"
+ *
+ * \see ezmessage
+ * \see ezbulkmail
+ * \see ezuser
+ */
+
+/**
+ * \defgroup ezmediacatalogue Media Catalogue
+ * \ingroup KernelModules
+ * \brief Audio/video and rich-media asset management.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZMedia
+ * - \ref eZMediaAttribute
+ * - \ref eZMediaCategory
+ * - \ref eZMediaType
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref attributeedit.php "attributeedit.php"
+ * - \ref browse.php "browse.php"
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref mediaedit.php "mediaedit.php"
+ * - \ref medialist.php "medialist.php"
+ * - \ref mediaview.php "mediaview.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref typeedit.php "typeedit.php"
+ * - \ref typelist.php "typelist.php"
+ *
+ * \see ezimagecatalogue
+ * \see ezfilemanager
+ * \see lib_ezfile
+ */
+
+/**
+ * \defgroup ezmessage Messages
+ * \ingroup KernelModules
+ * \brief System-level and user-level message notifications.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZMessage
+ * - \ref eZMessageDefinition
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref messageedit.php "messageedit.php"
+ * - \ref messagelist.php "messagelist.php"
+ * - \ref messagesend.php "messagesend.php"
+ * - \ref messageview.php "messageview.php"
+ * - \ref reciverpopup.php "reciverpopup.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref messageedit.php "messageedit.php"
+ * - \ref messagelist.php "messagelist.php"
+ * - \ref messagesend.php "messagesend.php"
+ * - \ref messageview.php "messageview.php"
+ *
+ * \see ezmail
+ * \see ezuser
+ * \see KernelClasses
+ */
+
+/**
+ * \defgroup ezmodule Module Registry
+ * \ingroup KernelModules
+ * \brief Core module discovery, registration and request dispatch.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZModuleHandler
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref activate.php "activate.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \see KernelClasses
+ * \see ezuser
+ * \see ezexample
+ */
+
+/**
+ * \defgroup eznewsfeed News Feed / RSS
+ * \ingroup KernelModules
+ * \brief RSS/Atom news feed aggregation and publishing.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZBackslashImporter
+ * - \ref eZNews
+ * - \ref eZNewsCategory
+ * - \ref eZNewsImporter
+ * - \ref eZNyheterNOImporter
+ * - \ref eZRDFImporter
+ * - \ref eZRSSImporter
+ * - \ref eZSourceSite
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref cron.php "cron.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref importnews.php "importnews.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref newsarchive.php "newsarchive.php"
+ * - \ref newsedit.php "newsedit.php"
+ * - \ref newssearch.php "newssearch.php"
+ * - \ref sourcesiteedit.php "sourcesiteedit.php"
+ * - \ref unpublished.php "unpublished.php"
+ *
+ * \par Public View Scripts
+ * - \ref allcategories.php "allcategories.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref headlines.php "headlines.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref newslist.php "newslist.php"
+ * - \ref search.php "search.php"
+ *
+ * \see ezarticle
+ * \see ezlink
+ * \see KernelClasses
+ */
+
+/**
+ * \defgroup ezpoll Polls
+ * \ingroup KernelModules
+ * \brief Online voting polls and result display.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZPoll
+ * - \ref eZPollChoice
+ * - \ref eZVote
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref polledit.php "polledit.php"
+ * - \ref pollist.php "pollist.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref pollist.php "pollist.php"
+ * - \ref result.php "result.php"
+ * - \ref userlogin.php "userlogin.php"
+ * - \ref vote.php "vote.php"
+ * - \ref votebox.php "votebox.php"
+ * - \ref votepage.php "votepage.php"
+ *
+ * \see ezsurvey
+ * \see ezquiz
+ * \see ezstats
+ */
+
+/**
+ * \defgroup ezquiz Quizzes
+ * \ingroup KernelModules
+ * \brief Quiz creation, management and scoring.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZQuizAlternative
+ * - \ref eZQuizAnswer
+ * - \ref eZQuizGame
+ * - \ref eZQuizQuestion
+ * - \ref eZQuizScore
+ * - \ref eZQuizTool
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref gameedit.php "gameedit.php"
+ * - \ref gamelist.php "gamelist.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref questionedit.php "questionedit.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref quizlist.php "quizlist.php"
+ * - \ref quizmyscores.php "quizmyscores.php"
+ * - \ref quizopen.php "quizopen.php"
+ * - \ref quizplay.php "quizplay.php"
+ * - \ref quizscores.php "quizscores.php"
+ *
+ * \see ezpoll
+ * \see ezsurvey
+ * \see ezarticle
+ * \see ezuser
+ */
+
+/**
+ * \defgroup ezsearch Search
+ * \ingroup KernelModules
+ * \brief Full-text site search indexing and retrieval.
+ *
+ * \details
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref search.php "search.php"
+ *
+ * \see ezarticle
+ * \see ezstats
+ * \see KernelClasses
+ */
+
+/**
+ * \defgroup ezsession Sessions (Kernel)
+ * \ingroup KernelModules
+ * \brief Kernel-level session handling and user session persistence.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZPreferences
+ * - \ref eZSession
+ *
+ * \par Admin View Scripts
+ * - \ref cron.php "cron.php"
+ *
+ * \see lib_ezsession
+ * \see ezuser
+ * \see KernelClasses
+ */
+
+/**
+ * \defgroup ezsitemanager Site Manager
+ * \ingroup KernelModules
+ * \brief Multi-site configuration, switching and management.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZMenu
+ * - \ref eZSection
+ * - \ref eZSectionFrontPage
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref cacheadmin.php "cacheadmin.php"
+ * - \ref csseditor.php "csseditor.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref fileedit.php "fileedit.php"
+ * - \ref filelist.php "filelist.php"
+ * - \ref imagevariationadmin.php "imagevariationadmin.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref menuedit.php "menuedit.php"
+ * - \ref menulist.php "menulist.php"
+ * - \ref sectionedit.php "sectionedit.php"
+ * - \ref sectionlist.php "sectionlist.php"
+ * - \ref siteconfig.php "siteconfig.php"
+ * - \ref sqlquery.php "sqlquery.php"
+ * - \ref templateedit.php "templateedit.php"
+ * - \ref templatelist.php "templatelist.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \see ezmodule
+ * \see ezabout
+ * \see ezxmlrpc
+ */
+
+/**
+ * \defgroup ezstats Statistics
+ * \ingroup KernelModules
+ * \brief Visitor statistics, page-view tracking and reporting.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZPageView
+ * - \ref eZPageViewQuery
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref browserlist.php "browserlist.php"
+ * - \ref cron.php "cron.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref dayreport.php "dayreport.php"
+ * - \ref entryexitpages.php "entryexitpages.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref monthreport.php "monthreport.php"
+ * - \ref overview.php "overview.php"
+ * - \ref pageviewlist.php "pageviewlist.php"
+ * - \ref productreport.php "productreport.php"
+ * - \ref refererlist.php "refererlist.php"
+ * - \ref requestpagelist.php "requestpagelist.php"
+ * - \ref visitorlist.php "visitorlist.php"
+ * - \ref yearreport.php "yearreport.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref storestats.php "storestats.php"
+ *
+ * \see ezad
+ * \see ezlink
+ * \see ezsearch
+ */
+
+/**
+ * \defgroup ezsurvey Surveys
+ * \ingroup KernelModules
+ * \brief Survey creation, distribution and result analysis.
+ *
+ * \details
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref default.php "default.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref preview.php "preview.php"
+ * - \ref stats.php "stats.php"
+ * - \ref surveyedit.php "surveyedit.php"
+ * - \ref surveylist.php "surveylist.php"
+ * - \ref values.php "values.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref surveylist.php "surveylist.php"
+ * - \ref thanks.php "thanks.php"
+ *
+ * \see ezpoll
+ * \see ezquiz
+ * \see ezbulkmail
+ * \see ezuser
+ */
+
+/**
+ * \defgroup ezsysinfo System Information
+ * \ingroup KernelModules
+ * \brief Runtime system diagnostics and environment reporting.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZSysinfo
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref fileinfo.php "fileinfo.php"
+ * - \ref hwinfo.php "hwinfo.php"
+ * - \ref meminfo.php "meminfo.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref netinfo.php "netinfo.php"
+ * - \ref sysinfo.php "sysinfo.php"
+ *
+ * \see KernelClasses
+ * \see ezabout
+ */
+
+/**
+ * \defgroup eztip Tips / Tip-of-the-day
+ * \ingroup KernelModules
+ * \brief Rotating tips or helpful hints displayed to site visitors.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZTip
+ * - \ref eZTipCategory
+ * - \ref eZTipClick
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref tipedit.php "tipedit.php"
+ * - \ref tiplist.php "tiplist.php"
+ * - \ref tipstatistics.php "tipstatistics.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref gototip.php "gototip.php"
+ * - \ref queuedtiplist.php "queuedtiplist.php"
+ * - \ref tiplist.php "tiplist.php"
+ *
+ * \see ezarticle
+ * \see KernelClasses
+ */
+
+/**
+ * \defgroup eztodo To-Do Lists
+ * \ingroup KernelModules
+ * \brief Personal and shared to-do item tracking.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZCategory
+ * - \ref eZPriority
+ * - \ref eZStatus
+ * - \ref eZTodo
+ * - \ref eZTodoLog
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref categorytypeedit.php "categorytypeedit.php"
+ * - \ref categorytypelist.php "categorytypelist.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref prioritytypeedit.php "prioritytypeedit.php"
+ * - \ref prioritytypelist.php "prioritytypelist.php"
+ * - \ref statustypeedit.php "statustypeedit.php"
+ * - \ref statustypelist.php "statustypelist.php"
+ *
+ * \par Public View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref todoedit.php "todoedit.php"
+ * - \ref todoinfo.php "todoinfo.php"
+ * - \ref todolist.php "todolist.php"
+ * - \ref todomenulist.php "todomenulist.php"
+ * - \ref todoview.php "todoview.php"
+ *
+ * \see ezuser
+ * \see ezbulkmail
+ * \see ezcalendar
+ */
+
+/**
+ * \defgroup eztrade Trade / E-Commerce
+ * \ingroup KernelModules
+ * \brief Product catalogues, shopping cart and order management.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZBoxType
+ * - \ref eZCSVImport
+ * - \ref eZCart
+ * - \ref eZCartItem
+ * - \ref eZCartOptionValue
+ * - \ref eZCartVoucherItem
+ * - \ref eZCheckout
+ * - \ref eZCheckoutSupplier
+ * - \ref eZFreeTradeImport
+ * - \ref eZOption
+ * - \ref eZOptionValue
+ * - \ref eZOrder
+ * - \ref eZOrderConfirmation
+ * - \ref eZOrderItem
+ * - \ref eZOrderOptionValue
+ * - \ref eZOrderStatus
+ * - \ref eZOrderStatusType
+ * - \ref eZPaypalReturn
+ * - \ref eZPreOrder
+ * - \ref eZPriceGroup
+ * - \ref eZProduct
+ * - \ref eZProductAttribute
+ * - \ref eZProductCategory
+ * - \ref eZProductCurrency
+ * - \ref eZProductForm
+ * - \ref eZProductPermission
+ * - \ref eZProductPriceRange
+ * - \ref eZProductSupplier
+ * - \ref eZProductTool
+ * - \ref eZProductType
+ * - \ref eZShippingGroup
+ * - \ref eZShippingType
+ * - \ref eZVATType
+ * - \ref eZVoucher
+ * - \ref eZVoucherEMail
+ * - \ref eZVoucherInformation
+ * - \ref eZVoucherSMail
+ * - \ref eZVoucherUsed
+ * - \ref eZWishList
+ * - \ref eZWishListItem
+ * - \ref eZWishListOptionValue
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref ezcheckoutsupplier.php "ezcheckoutsupplier.php"
+ * - \ref ezproductsupplier.php "ezproductsupplier.php"
+ * - \ref metasupplier.php "metasupplier.php"
+ * - \ref searchsupplier.php "searchsupplier.php"
+ * - \ref urlsupplier.php "urlsupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref attributeedit.php "attributeedit.php"
+ * - \ref boxtypes.php "boxtypes.php"
+ * - \ref categoryedit.php "categoryedit.php"
+ * - \ref categorylist.php "categorylist.php"
+ * - \ref cron.php "cron.php"
+ * - \ref currency.php "currency.php"
+ * - \ref customerlist.php "customerlist.php"
+ * - \ref customerview.php "customerview.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref detailcategorylist.php "detailcategorylist.php"
+ * - \ref export_froogle.php "export_froogle.php"
+ * - \ref export_yahoo.php "export_yahoo.php"
+ * - \ref fileedit.php "fileedit.php"
+ * - \ref filelist.php "filelist.php"
+ * - \ref formlist.php "formlist.php"
+ * - \ref froogle.php "froogle.php"
+ * - \ref imageedit.php "imageedit.php"
+ * - \ref imagelist.php "imagelist.php"
+ * - \ref linklist.php "linklist.php"
+ * - \ref linkselect.php "linkselect.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref optionedit.php "optionedit.php"
+ * - \ref optionlist.php "optionlist.php"
+ * - \ref orderedit.php "orderedit.php"
+ * - \ref orderlist.php "orderlist.php"
+ * - \ref orderview.php "orderview.php"
+ * - \ref pricegroupedit.php "pricegroupedit.php"
+ * - \ref pricegroups.php "pricegroups.php"
+ * - \ref productedit.php "productedit.php"
+ * - \ref productpreview.php "productpreview.php"
+ * - \ref productsearch.php "productsearch.php"
+ * - \ref seti.php "seti.php"
+ * - \ref shippingtypes.php "shippingtypes.php"
+ * - \ref simplecategorylist.php "simplecategorylist.php"
+ * - \ref typeedit.php "typeedit.php"
+ * - \ref typelist.php "typelist.php"
+ * - \ref vattypes.php "vattypes.php"
+ * - \ref voucheredit.php "voucheredit.php"
+ * - \ref voucherlist.php "voucherlist.php"
+ *
+ * \par Public View Scripts
+ * - \ref cart.php "cart.php"
+ * - \ref categorylist.php "categorylist.php"
+ * - \ref categorytreelist.php "categorytreelist.php"
+ * - \ref checkout.php "checkout.php"
+ * - \ref confirmation.php "confirmation.php"
+ * - \ref corporate_account.php "corporate_account.php"
+ * - \ref customerlogin.php "customerlogin.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref extendedsearch.php "extendedsearch.php"
+ * - \ref findwishlist.php "findwishlist.php"
+ * - \ref hotdealsgallery.php "hotdealsgallery.php"
+ * - \ref hotdealslist.php "hotdealslist.php"
+ * - \ref invoice.php "invoice.php"
+ * - \ref mastercard.php "mastercard.php"
+ * - \ref menubox.forum.php "menubox.forum.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref metasupplier.php "metasupplier.php"
+ * - \ref orderlist.php "orderlist.php"
+ * - \ref ordersendt.php "ordersendt.php"
+ * - \ref orderview.php "orderview.php"
+ * - \ref payment.php "payment.php"
+ * - \ref paypalnotify.php "paypalnotify.php"
+ * - \ref precheckout.php "precheckout.php"
+ * - \ref productgallery.php "productgallery.php"
+ * - \ref productlist.php "productlist.php"
+ * - \ref productsearch.php "productsearch.php"
+ * - \ref productview.php "productview.php"
+ * - \ref searchsupplier.php "searchsupplier.php"
+ * - \ref sendwishlist.php "sendwishlist.php"
+ * - \ref sitemap.php "sitemap.php"
+ * - \ref smallcart.php "smallcart.php"
+ * - \ref smallproductlist.php "smallproductlist.php"
+ * - \ref urlsupplier.php "urlsupplier.php"
+ * - \ref viewwishlist.php "viewwishlist.php"
+ * - \ref visa.php "visa.php"
+ * - \ref voucher.php "voucher.php"
+ * - \ref voucherinformation.php "voucherinformation.php"
+ * - \ref vouchermain.php "vouchermain.php"
+ * - \ref voucherview.php "voucherview.php"
+ * - \ref wishlist.php "wishlist.php"
+ *
+ * \see ezimagecatalogue
+ * \see lib_ezsession
+ * \see ezuser
+ * \see ezxmlrpc
+ * \see ezstats
+ */
+
+/**
+ * \defgroup ezurltranslator URL Translator
+ * \ingroup KernelModules
+ * \brief Human-readable URL aliasing and translation.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZURLTranslator
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref urledit.php "urledit.php"
+ *
+ * \see ezmodule
+ * \see ezsitemanager
+ * \see KernelClasses
+ */
+
+/**
+ * \defgroup ezuser Users & Authentication
+ * \ingroup KernelModules
+ * \brief User registration, authentication, profiles and permissions.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZAuthor
+ * - \ref eZForgot
+ * - \ref eZModule
+ * - \ref eZObjectPermission
+ * - \ref eZPermission
+ * - \ref eZUser
+ * - \ref eZUserGroup
+ *
+ * \par Data Suppliers
+ * - \ref datasupplier.php "datasupplier.php"
+ *
+ * \par Admin View Scripts
+ * - \ref admincheck.php "admincheck.php"
+ * - \ref authorlist.php "authorlist.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref extsearch.php "extsearch.php"
+ * - \ref groupedit.php "groupedit.php"
+ * - \ref grouplist.php "grouplist.php"
+ * - \ref login.php "login.php"
+ * - \ref menubox.php "menubox.php"
+ * - \ref passwordchange.php "passwordchange.php"
+ * - \ref sessioninfo.php "sessioninfo.php"
+ * - \ref settings.php "settings.php"
+ * - \ref success.php "success.php"
+ * - \ref userbox.php "userbox.php"
+ * - \ref useredit.php "useredit.php"
+ * - \ref userlist.php "userlist.php"
+ * - \ref welcome.php "welcome.php"
+ *
+ * \par Public View Scripts
+ * - \ref account_static.php "account_static.php"
+ * - \ref addressedit.php "addressedit.php"
+ * - \ref datasupplier.php "datasupplier.php"
+ * - \ref forgot.php "forgot.php"
+ * - \ref forgotmessage.php "forgotmessage.php"
+ * - \ref login.php "login.php"
+ * - \ref missingemailmessage.php "missingemailmessage.php"
+ * - \ref norights.php "norights.php"
+ * - \ref passwordchange.php "passwordchange.php"
+ * - \ref registration.php "registration.php"
+ * - \ref step1.php "step1.php"
+ * - \ref step2.php "step2.php"
+ * - \ref userbox.php "userbox.php"
+ * - \ref usercheck.php "usercheck.php"
+ * - \ref useredit.php "useredit.php"
+ * - \ref userwithaddress.php "userwithaddress.php"
+ *
+ * \see lib_ezsession
+ * \see ezsession
+ * \see ezmail
+ * \see ezbulkmail
+ * \see ezxmlrpc
+ */
+
+/**
+ * \defgroup ezxml XML / Content Types
+ * \ingroup KernelModules
+ * \brief XML data handling and structured content-type definitions.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZDOMDocument
+ * - \ref eZDOMNode
+ * - \ref eZXML
+ *
+ * \see ezarticle
+ * \see eznewsfeed
+ * \see ezxmlrpc
+ * \see KernelClasses
+ */
+
+/**
+ * \defgroup ezxmlrpc XML-RPC
+ * \ingroup KernelModules
+ * \brief XML-RPC server exposing kernel functionality to remote clients.
+ *
+ * \details
+ *
+ * \par Key Classes
+ * - \ref eZXMLRPCArray
+ * - \ref eZXMLRPCBase64
+ * - \ref eZXMLRPCBool
+ * - \ref eZXMLRPCCall
+ * - \ref eZXMLRPCClient
+ * - \ref eZXMLRPCDataTypeDecoder
+ * - \ref eZXMLRPCDatetime
+ * - \ref eZXMLRPCDouble
+ * - \ref eZXMLRPCFunction
+ * - \ref eZXMLRPCInt
+ * - \ref eZXMLRPCResponse
+ * - \ref eZXMLRPCServer
+ * - \ref eZXMLRPCString
+ * - \ref eZXMLRPCStruct
+ *
+ * \see ezxml
+ * \see ezarticle
+ * \see ezuser
+ * \see eztrade
+ */

@@ -1,0 +1,44 @@
+/**
+ * \mainpage Exponential CMS — PHP Class Reference
+ *
+ * \section intro Introduction
+ *
+ * This is the complete PHP class reference for <b>Exponential 6.0.13</b>, the
+ * open-source enterprise CMS maintained by <a href="https://se7enx.com">7x (se7enxweb)</a>.
+ *
+ * Source: <a href="https://github.com/se7enxweb/exponential">github.com/se7enxweb/exponential</a>
+ *
+ * \section browse Browse the Documentation
+ *
+ * - \ref annotated "Class List" — All documented PHP classes
+ * - \ref hierarchy "Class Hierarchy" — Inheritance tree
+ * - \ref functions "Class Members" — All class methods and properties
+ * - \ref files "File List" — Source files with documentation
+ * - \ref globals "File Members" — Global functions and variables
+ * - \ref modules "Modules" — Documentation groups
+ *
+ * \section libs Libraries
+ *
+ * | Library | Description |
+ * |---------|-------------|
+ * | \b ezdb | Database abstraction layer (MySQL, MySQLi, PostgreSQL, SQLite) |
+ * | \b ezdbschema | Database schema abstraction |
+ * | \b ezfile | File and directory utilities |
+ * | \b ezi18n | Internationalisation and translation |
+ * | \b ezimage | Image handling and conversion |
+ * | \b ezlocale | Locale, date, time and number formatting |
+ * | \b ezpdf | PDF generation |
+ * | \b ezsoap | SOAP client/server |
+ * | \b eztemplate | Template engine |
+ * | \b ezutils | Miscellaneous utility classes |
+ *
+ * \section kernel Kernel
+ *
+ * The \b kernel contains the core CMS classes covering content objects,
+ * content classes, datatypes, users, roles, workflows, search, and more.
+ *
+ * \section license License
+ *
+ * Exponential is released under the GNU General Public License v2.
+ * See <a href="https://github.com/se7enxweb/exponential/blob/main/LICENSE">LICENSE</a>.
+ */

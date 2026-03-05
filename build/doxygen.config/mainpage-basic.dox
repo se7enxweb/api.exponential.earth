@@ -1,0 +1,45 @@
+/**
+ * \mainpage Exponential Basic — PHP Class Reference
+ *
+ * \section intro Introduction
+ *
+ * This is the complete PHP class reference for <b>Exponential Basic 2.4.0.1</b>,
+ * a modernised version of the classic Exponential 2.x CMS, updated for PHP 8,
+ * maintained by <a href="https://se7enx.com">7x (se7enxweb)</a>.
+ *
+ * Source: <a href="https://github.com/se7enxweb/exponentialbasic">github.com/se7enxweb/exponentialbasic</a><br/>
+ * Website: <a href="https://basic.exponential.earth">basic.exponential.earth</a>
+ *
+ * \section browse Browse the Documentation
+ *
+ * - \ref annotated "Class List" — All documented PHP classes
+ * - \ref hierarchy "Class Hierarchy" — Inheritance tree
+ * - \ref functions "Class Members" — All class methods and properties
+ * - \ref files "File List" — Source files with documentation
+ * - \ref globals "File Members" — Global functions and variables
+ * - \ref modules "Modules" — Documentation groups
+ *
+ * \section libs Libraries
+ *
+ * | Library | Description |
+ * |---------|-------------|
+ * | \b ezfile | File and directory utilities |
+ * | \b ezi18n | Internationalisation and translation |
+ * | \b ezsession | Session handling |
+ * | \b ezutils | Miscellaneous utility classes |
+ *
+ * \section kernel Kernel Modules
+ *
+ * The \b kernel contains the core CMS classes covering articles, forums,
+ * calendars, polls, user management, search, and more.
+ *
+ * \section related Related Documentation
+ *
+ * - <a href="/doxygen/trunk/LS/html/">Exponential Legacy Stack class reference</a>
+ * - <a href="/doxygen/trunk/NS/html/">Exponential 5.x Kernel class reference</a>
+ *
+ * \section license License
+ *
+ * Released under the GNU General Public License v2 (or later).
+ * See <a href="https://github.com/se7enxweb/exponentialbasic/blob/master/COPYRIGHT.md">COPYRIGHT.md</a>.
+ */

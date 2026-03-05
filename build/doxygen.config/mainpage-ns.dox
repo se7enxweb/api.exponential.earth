@@ -1,0 +1,49 @@
+/**
+ * \mainpage Exponential CMS — 5.x Kernel (New Stack) PHP Class Reference
+ *
+ * \section intro Introduction
+ *
+ * This is the complete PHP class reference for the <b>Exponential 5.x Kernel (New Stack)</b>,
+ * a modern Symfony-based CMS kernel maintained by
+ * <a href="https://se7enx.com">7x (se7enxweb)</a>.
+ *
+ * Source: <a href="https://github.com/se7enxweb/ezpublish-kernel">github.com/se7enxweb/ezpublish-kernel</a>
+ *
+ * \section browse Browse the Documentation
+ *
+ * - \ref annotated "Class List" — All documented PHP classes
+ * - \ref hierarchy "Class Hierarchy" — Inheritance tree
+ * - \ref functions "Class Members" — All class methods and properties
+ * - \ref files "File List" — Source files with documentation
+ * - \ref globals "File Members" — Global functions and variables
+ * - \ref modules "Modules" — Documentation groups
+ * - \ref namespaces "Namespaces" — PHP namespaces
+ *
+ * \section arch Architecture
+ *
+ * The kernel is organised into three main layers:
+ *
+ * | Layer | Namespace | Description |
+ * |-------|-----------|-------------|
+ * | \b API | eZ\\Publish\\API | Public API: content repository, values, and interfaces |
+ * | \b Core | eZ\\Publish\\Core | Core implementations: persistence, search, field types, IO, MVC |
+ * | \b SPI | eZ\\Publish\\SPI | Service Provider Interfaces for alternative implementations |
+ *
+ * \section bundles Bundles
+ *
+ * | Bundle | Description |
+ * |--------|-------------|
+ * | \b EzPublishCoreBundle | Symfony bundle integrating the kernel with the full stack |
+ * | \b EzPublishDebugBundle | Debug tools and data collectors |
+ * | \b EzPublishRestBundle | REST API bundle |
+ * | \b EzPublishLegacySearchEngineBundle | Legacy search engine integration |
+ *
+ * \section related Related Documentation
+ *
+ * - <a href="/doxygen/trunk/LS/html/">Legacy Stack (4.x kernel) class reference</a>
+ *
+ * \section license License
+ *
+ * Released under the GNU General Public License v2.
+ * See <a href="https://github.com/se7enxweb/ezpublish-kernel/blob/master/LICENSE">LICENSE</a>.
+ */
