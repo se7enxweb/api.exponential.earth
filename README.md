@@ -210,7 +210,7 @@ Maintainer: **se7enxweb** — <https://github.com/se7enxweb>
 
 ## Credits and Thanks
 
-Special credit to the maintainers of [https://github.com/brookinsconsulting/apidoc.ez.no/](pubsvn/apidocs.ez.no) who inspired this project.
+Special credit to the maintainers of [pubsvn/apidocs.ez.no](https://github.com/brookinsconsulting/apidoc.ez.no/) who inspired this project.
 
 ## Copyright & License
 
