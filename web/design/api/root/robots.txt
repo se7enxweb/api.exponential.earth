@@ -1,0 +1,17 @@
+User-agent: Slurp
+Crawl-delay: 0.7
+
+User-agent: GigaBot
+Crawl-delay: 0.7
+
+User-agent: *
+# Allow indexing only of the doxygen-generated info, all other tools pages not indexed
+Disallow: /websvn/
+Disallow: /viewcvs/
+Disallow: /websvn2/
+Disallow: /viewvc/
+Disallow: /statsvn/
+Disallow: /awstats/
+# Direct svn not indexed, except community repo, that has no doxygen
+Disallow: /nextgen/
+Disallow: /nextgen_php5/
