@@ -9,14 +9,15 @@ $oldVersions = array( "4.3.0", "4.2.0", "4.1.4", "4.0.7", "3.10.1", "3.9.5", "3.
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Exponential : API Documentation : Portal</title>
-    <link rel="stylesheet" type="text/css" href="design/stylesheets/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="design/stylesheets/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" type="text/css" href="design/stylesheets/main.css" />
+    <link rel="stylesheet" type="text/css" href="design/api/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="design/api/stylesheets/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" type="text/css" href="design/api/stylesheets/main.css" />
 </head>
 <body data-spy="scroll" data-target=".navbar">
     <div class="row-fluid">
 	<a href="https://github.com/se7enxweb/exponential">
 	  <img
+           class="fork"
 	       loading="lazy"
 	       width="149"
 	       height="149"
@@ -26,7 +27,7 @@ $oldVersions = array( "4.3.0", "4.2.0", "4.1.4", "4.0.7", "3.10.1", "3.9.5", "3.
         </a>
         <header class="main-header" >
             <a href="/">
-                <img class="main-logo" src="design/images/exponential.png" width="300rem" alt="Exponential API Documentation" />
+                <img class="main-logo" src="design/api/images/exponential.png" alt="Exponential API Documentation" />
             </a>
             <!-- 
             <nav class="main-nav navbar">
@@ -432,8 +433,8 @@ $oldVersions = array( "4.3.0", "4.2.0", "4.1.4", "4.0.7", "3.10.1", "3.9.5", "3.
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-migrate-3.5.2.min.js"></script>
-    <script type="text/javascript" src="design/javascript/bootstrap.min.js"></script>
-    <script type="text/javascript" src="design/javascript/main.js"></script>
+    <script type="text/javascript" src="design/api/javascript/bootstrap.min.js"></script>
+    <script type="text/javascript" src="design/api/javascript/main.js"></script>
 
     <div style="text-align:center;font-weight:bold;font-size:1.15em;padding:1em 0 0.75em;">
         Copyright &copy; 1998 &ndash; 2026 <a href="https://se7enx.com/">7x</a>. All rights reserved.
