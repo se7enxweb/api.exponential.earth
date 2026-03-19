@@ -413,14 +413,18 @@ $oldVersions = array( "4.3.0", "4.2.0", "4.1.4", "4.0.7", "3.10.1", "3.9.5", "3.
                     <div class="tile">
                         <h4>Composer Packages</h4>
                         <p>Get the Exponential Composer Packages you want today!</p>
-                        <a class="btn" href="https://packagist.org/search/?query=se7enxweb">Get Composer Packages</a>
+                        <a class="btn" href="https://packages.se7enx.com">Get Composer Packages</a>
                     </div>
                     <div class="tile">
                         <h4>Documentation</h4>
                         <p>Official Exponential documentation for the current release can be found online.</p>
-                        <a class="btn" href="https://doc.exponential.earth/Exponential/">Exponenital (Legacy) Docs</a><br />
-                        <a class="btn" href="https://doc.exponential.earth/">5.x Docs</a>
-                    </div>
+                        <a class="btn" href="https://doc.exponential.earth/Exponential/">Exponenital 6.x+ Product Documentation (Legacy)</a><br />
+                        <a class="btn" href="https://exponential.doc.exponential.earth/display/MAIN/ExponentialPlatformDocumentationCenter.html">5.x Setup Documentation</a>
+                        <a class="btn" href="https://exponential.doc.exponential.earth/Exponential/Technical-manual/5.html">5.x Technical Docs</a>
+                        <a class="btn" href="https://exponential.doc.exponential.earth/Exponential/User-manual/5.html">5.x User Docs</a>
+                        <a class="btn" href="https://doc.core.exponential.earth">4.x Developer Core Product Wiki Documentation</a>
+                        <a class="btn" href="https://doc.sdk.exponential.earth">3.x Module Developer SDK Documenation</a>
+		    </div>
                 </section>
 
                 <section id="release_history">
